@@ -1,0 +1,39 @@
+# Need extension "REST Client" for VS Code
+
+@url = http://127.0.0.1:3000
+@bookId = 9783f00a-a18f-478f-bbf2-8ba2aadbd0b6
+
+###
+
+# Получить все книги из библиотеки
+GET {{url}}/book HTTP/1.1
+
+###
+
+# Получить книгу по ID
+GET {{url}}/book/{{bookId}} HTTP/1.1
+
+###
+
+# Добавить новую книгу
+POST {{url}}/book HTTP/1.1
+content-type: application/json
+
+{
+    "title": "C# for beginner"
+}
+
+###
+
+# Обновить данные книги по ID
+PUT {{url}}/book/{{bookId}} HTTP/1.1
+content-type: application/json
+
+{
+    "title": "TypeScript for beginner"
+}
+
+###
+
+# Удалить книгу по ID
+DELETE {{url}}/book/{{bookId}} HTTP/1.1

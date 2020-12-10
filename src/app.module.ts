@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { BookModule } from './modules/book/book.module';
 
 @Module({
   imports: [
@@ -12,17 +13,14 @@ import { AppService } from './app.service';
       username: 'root',
       password: 'root',
       database: 'test',
-      entities: ['./dist/entity/**/*.js'],
+      entities: ['./dist/**/*.entity.js'],
       migrations: ['./dist/migration/**/*.js'],
       synchronize: false,
       migrationsRun: true,
       logging: true,
       logger: 'file',
-      cli: {
-        entitiesDir: './dist/entity',
-        migrationsDir: './dist/migration',
-      },
-  }),
+    }),
+    BookModule,
   ],
   controllers: [AppController],
   providers: [AppService],
