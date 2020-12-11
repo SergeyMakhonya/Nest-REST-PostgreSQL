@@ -26,18 +26,18 @@ export class BookService {
         return book;
     }
 
-    async addBook(addBookDto: AddBookDto): Promise<void> {
-        await this.bookRepository.addBook(addBookDto);
+    async addBook(addBookDto: AddBookDto): Promise<Book> {
+        return await this.bookRepository.addBook(addBookDto);
     }
 
-    async updateBook(bookId: string, updateBookDto: UpdateBookDto): Promise<void> {
+    async updateBook(bookId: string, updateBookDto: UpdateBookDto): Promise<Book> {
         const book = await this.bookRepository.getBook(bookId);
 
         if (!book) {
             throw new NotFoundException('Book not found');
         }
 
-        await this.bookRepository.updateBook(bookId, updateBookDto);
+        return await this.bookRepository.updateBook(bookId, updateBookDto);
     }
 
     async removeBook(bookId: string): Promise<void> {

@@ -81,11 +81,14 @@ describe('BookService', () => {
         // Создаём книгу
         it('should add book', async () => {
             const addBookDto: AddBookDto = { title: 'JS for beginners' };
+            const mockBook = { id: '1ef7db95-e856-49a7-97b6-6f874bc0107e', ...addBookDto };
+            bookRepository.addBook.mockResolvedValue(mockBook);
 
             // Убедимся что функция addBook из репозитория ранее не вызывалась
             expect(bookRepository.addBook).not.toHaveBeenCalled();
 
-            await bookService.addBook(addBookDto);
+            const result = await bookService.addBook(addBookDto);
+            expect(result).toEqual(mockBook);
 
             // Убедимся что была вызвана функция addBook из репозитория
             expect(bookRepository.addBook).toHaveBeenCalledWith(addBookDto);
@@ -104,15 +107,20 @@ describe('BookService', () => {
         // Обновляем информацию о книге
         it('should update book', async () => {
             const bookId = '1ef7db95-e856-49a7-97b6-6f874bc0107e';
-            const mockBook = { id: bookId, title: 'JS for beginners', };
-            bookRepository.getBook.mockResolvedValue(mockBook);
-
+            const getBook = { title: 'JS for beginners' };
             const updateBookDto: UpdateBookDto = { title: 'TypeScript for beginners' };
+            
+            const getMockBook = { id: bookId, ...getBook };
+            const updateMockBook = { id: bookId, ...updateBookDto };
+            
+            bookRepository.getBook.mockResolvedValue(getMockBook);
+            bookRepository.updateBook.mockResolvedValue(updateMockBook);
 
             // Убедимся что функция updateBook из репозитория ранее не вызывалась
             expect(bookRepository.updateBook).not.toHaveBeenCalled();
 
-            await bookService.updateBook(bookId, updateBookDto);
+            const result = await bookService.updateBook(bookId, updateBookDto);
+            expect(result).toEqual(updateMockBook);
 
             // Убедимся что была вызвана функция updateBook из репозитория
             expect(bookRepository.updateBook).toHaveBeenCalledWith(bookId, updateBookDto);

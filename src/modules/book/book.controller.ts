@@ -22,7 +22,7 @@ export class BookController {
     // Добавить новую книгу в библиотеку
     @Post()
     async addOne(@Body() addBookDto: AddBookDto) {
-        await this.bookService.addBook(addBookDto);
+        return await this.bookService.addBook(addBookDto);
     }
 
     // Обновить название у книги по ID
@@ -31,7 +31,7 @@ export class BookController {
         @Param('id') bookId: string,
         @Body() updateBookDto: UpdateBookDto,
     ) {
-        await this.bookService.updateBook(bookId, updateBookDto);
+        return await this.bookService.updateBook(bookId, updateBookDto);
     }
 
     // Удалить книгу из библиотеки по ID

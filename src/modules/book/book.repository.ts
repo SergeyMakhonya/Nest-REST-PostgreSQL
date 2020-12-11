@@ -12,13 +12,25 @@ export class BookRepository extends Repository<Book> {
         return await this.findOne(id);
     }
 
-    async addBook(addBookDto: AddBookDto): Promise<void> {
+    async addBook(addBookDto: AddBookDto): Promise<Book> {
         const newBook = await this.create(addBookDto);
         await this.save(newBook);
+        return newBook;
     }
 
-    async updateBook(bookId: string, updateBookDto: UpdateBookDto): Promise<void> {
-        await this.update(bookId, updateBookDto);
+    async updateBook(bookId: string, updateBookDto: UpdateBookDto): Promise<Book> {
+        const {title} = updateBookDto;
+        
+        const book = await this.findOne(bookId);
+
+        if (!book) {
+            return null;
+        }
+
+        book.title = title;
+        await this.save(book);
+
+        return book;
     }
 
     async removeBook(bookId: string): Promise<void> {
