@@ -1,35 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm/dist/common/typeorm.decorators';
-import { Repository } from 'typeorm';
 import { Book } from './book.entity';
+import { BookRepository } from './book.repository';
 import { AddBookDto } from './dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 
 @Injectable()
 export class BookService {
     constructor(
-        @InjectRepository(Book)
-        private bookRepository: Repository<Book>,
+        @InjectRepository(BookRepository)
+        private bookRepository: BookRepository,
     ) { }
 
-    async findAll(): Promise<Book[]> {
-        return await this.bookRepository.find();
+    async findBooks(): Promise<Book[]> {
+        return await this.bookRepository.findBooks();
     }
 
-    async findOne(id: string): Promise<Book> {
-        return await this.bookRepository.findOne(id);
+    async getBook(bookId: string): Promise<Book> {
+        const book = await this.bookRepository.getBook(bookId);
+
+        if (!book) {
+            throw new NotFoundException('Book not found');
+        }
+
+        return book;
     }
 
-    async addOne(addBookDto: AddBookDto): Promise<void> {
-        const newBook = await this.bookRepository.create(addBookDto);
-        await this.bookRepository.save(newBook);
+    async addBook(addBookDto: AddBookDto): Promise<void> {
+        await this.bookRepository.addBook(addBookDto);
     }
 
-    async updateOne(bookId: string, updateBookDto: UpdateBookDto): Promise<void> {
-        await this.bookRepository.update(bookId, updateBookDto);
+    async updateBook(bookId: string, updateBookDto: UpdateBookDto): Promise<void> {
+        const book = await this.bookRepository.getBook(bookId);
+
+        if (!book) {
+            throw new NotFoundException('Book not found');
+        }
+
+        await this.bookRepository.updateBook(bookId, updateBookDto);
     }
 
-    async removeOne(bookId: string): Promise<void> {
-        await this.bookRepository.delete(bookId);
+    async removeBook(bookId: string): Promise<void> {
+        await this.bookRepository.removeBook(bookId);
     }
 }

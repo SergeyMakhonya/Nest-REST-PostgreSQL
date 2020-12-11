@@ -10,19 +10,19 @@ export class BookController {
     // Получить все книги из библиотеки
     @Get()
     async findAll() {
-        return await this.bookService.findAll();
+        return await this.bookService.findBooks();
     }
 
     // Получить одну книгу из библиотеки по ID
     @Get(':id')
     async findOne(@Param('id') bookId: string) {
-        return await this.bookService.findOne(bookId);
+        return await this.bookService.getBook(bookId);
     }
 
     // Добавить новую книгу в библиотеку
     @Post()
     async addOne(@Body() addBookDto: AddBookDto) {
-        await this.bookService.addOne(addBookDto);
+        await this.bookService.addBook(addBookDto);
     }
 
     // Обновить название у книги по ID
@@ -31,12 +31,12 @@ export class BookController {
         @Param('id') bookId: string,
         @Body() updateBookDto: UpdateBookDto,
     ) {
-        await this.bookService.updateOne(bookId, updateBookDto);
+        await this.bookService.updateBook(bookId, updateBookDto);
     }
 
     // Удалить книгу из библиотеки по ID
     @Delete(':id')
     async removeOne(@Param('id') bookId: string) {
-        await this.bookService.removeOne(bookId);
+        await this.bookService.removeBook(bookId);
     }
 }
